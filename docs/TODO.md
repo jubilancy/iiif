@@ -19,116 +19,68 @@ A Mirador-based IIIF viewer and manifest gallery, deployed on Cloudflare at `iii
 (none right now)
 
 
+## Status (update as you go)
+
+Legend: [x] done and checked here; [~] built but not fully verified (reason given); [ ] not done.
+
 ## Phase 1: Scaffold
 
-- [ ] `npm create vite` (vanilla or React) in repo root; add `.gitignore`, `package.json`
-- [ ] Install `mirador`, `react`, `react-dom`, `react-i18next`, `@emotion/react`, `@emotion/styled`, `@mui/material`, `@mui/system` (dependency list from the mirador-integration README; confirm versions against `mirador` peerDependencies)
-- [ ] Minimal viewer at `/` that mounts `Mirador.viewer({ id: 'mirador' })`
-- [ ] Read `?manifest=` (support multiple values) and open each in its own window
-- [ ] Local dev + production build working
+- [x] Vite + React 19 + Mirador 4 project (`npm run dev` / `npm run build` work)
+- [x] Viewer reads `?manifest=` (multiple allowed); theme (light/dark) passed to Mirador
+- [x] Dependencies installed with peers satisfied (`react-i18next@15`: v17 conflicts with `mirador-image-tools`)
 
 ## Phase 2: Cloudflare deploy
 
-- [ ] Create Cloudflare Pages project connected to `jubilancy/iiif` (verify build command and output dir against the Pages Vite docs)
-- [ ] Add custom domain `iiif.glosse.me` in the Pages dashboard first, then DNS CNAME to `<project>.pages.dev` (if glosse.me DNS is not on Cloudflare)
-- [ ] Add `_redirects` / `_headers` as needed (SPA routes `/embed`, CORS for `/manifests/*`)
+- [x] `public/_headers` (CORS for `/manifests/*`, caching) and SPA fallback confirmed from Cloudflare docs; see `docs/DEPLOY.md`
+- [ ] **Manual (needs your Cloudflare account):** create the Pages project, set build to `npm run build` / `dist`, add custom domain `iiif.glosse.me`
 
-## Phase 3: Plugins (all Mirador 4-compatible found on npm)
+## Phase 3: Plugins
 
-Verified peer dependencies via the npm registry:
+- [x] Loaded: image-tools, share, dl-plugin, downloaddialog, canvaslink, imagecropper, keyboardshortcuts, annotation-editor, canvasnavigation, plus glosse.me branding. The viewer mounts with all of them (checked in headless Chromium).
+- [~] `mirador-textoverlay`: **opt-in** (`?enable=textoverlay`). Bisecting showed it logs `Fetch API cannot load dctypes:Image` on Presentation 2.x manifests. Needs a check on a real OCR manifest in a normal browser before enabling by default.
+- [~] Overlap/conflicts: `dl-plugin` and `downloaddialog` both add download UI; `canvasnavigation` replaces a built-in. Needs a look in a real browser; use `?disable=` to isolate.
+- Skipped on purpose: `mirador-annotations` (Mirador 3 only), `@harvard-lts/*` (Harvard-specific), `mirador-jump-to-page` (2017).
 
-- [ ] `mirador-image-tools` (mirador ^4)
-- [ ] `mirador-share-plugin` (mirador ^4)
-- [ ] `mirador-dl-plugin` (mirador ^4, react ^19)
-- [ ] `mirador-annotation-editor` (mirador ^4.2.3, react >=19), for creating annotations
-- [ ] `mirador-textoverlay` (mirador 4.x), selectable OCR/transcription text
-- [ ] `mirador-canvaslink` (Mirador 4)
-- [ ] `mirador-downloaddialog` (Mirador 4)
-- [ ] `mirador-imagecropper` (Mirador 4)
-- [ ] `mirador-keyboardshortcuts` (Mirador 4)
-- [ ] `mirador-canvasnavigation` (Mirador 4; **replaces** the built-in canvas navigation, may conflict with others, test)
+## Phase 4: Gallery, collage
 
-Evaluate / probably skip:
+- [x] Gallery from `public/gallery.csv`; missing titles/thumbnails are filled from the manifest; bad manifests don't break the page
+- [x] Landing page (`/` with no `?manifest=`) shows the gallery; filter by text and collection
+- [x] Collage: paste URLs one per line, per-line validation (bad lines stay in the box), reorder/remove
+- [x] Export: shareable link, IIIF Collection JSON, PNG (all three tested in headless Chromium; PNG shows a placeholder for images that fail to load)
+- [x] "Add to collage" from gallery and search results; collage kept in localStorage
 
-- `mirador-annotations` 0.5.0: Mirador 3 only (peer `mirador ^3`), superseded by `mirador-annotation-editor`
-- `@harvard-lts/mirador-*` (analytics, help, login, eda, pdf, harvard-custom, hide-nav, url-sync, annotations-auth): built for Harvard's viewer; review each before use
-- `mirador-jump-to-page`: last published 2017, likely M2/M3-era
+## Phase 4b: Search sources
 
-For each plugin: install, register in the plugins array, confirm no conflicts, record any config in `docs/`.
-
-## Phase 4: Eliana's gallery (default landing for visitors with no manifest list)
-
-Purpose: anyone who arrives without manifest URLs can browse a curated set and open items. Driven by a CSV.
-
-- [ ] Define `public/gallery.csv` schema (suggested: `manifest_url,title,thumbnail,collection,notes`)
-- [ ] Parse CSV in the browser (fetch at load) and render a card grid
-- [ ] Click card → open in viewer (`/?manifest=...`); multi-select → compare view
-- [ ] Search/filter by title, collection
-- [ ] Handle bad/unreachable manifests gracefully (skip + show placeholder)
-- [ ] Landing page (`/` with no `?manifest=`) shows the gallery
-- [ ] Support IIIF Presentation 2.x and 3.x manifests (the Smithsonian one is 2.x)
-
-### Collage
-
-- [ ] Collage page: textarea, one manifest URL per line
-- [ ] Validate each line (fetch, check it is a IIIF manifest, report failures per line without blocking the rest)
-- [ ] Preview the collected items as a grid; reorder/remove before export
-- [ ] Export menu offering all three (user chooses):
-  - [ ] Shareable link (`/?manifest=a&manifest=b…`)
-  - [ ] Downloadable IIIF Collection JSON
-  - [ ] Image collage (PNG), rendered client-side from manifest thumbnails/images (check CORS on source image servers; handle failures per item)
-- [ ] "Add to collage" button on gallery cards
-
-## Phase 4b: Searchable museum/library sources (IIIF-native)
-
-Replaces the earlier Met-only plan. The Met API returns plain JPEGs with no IIIF manifests, so it is demoted to optional (see end). Verified live on 2026-11-09 (all send `Access-Control-Allow-Origin` for browser calls unless noted):
-
-| Source | Search | IIIF manifest | Notes |
-| --- | --- | --- | --- |
-| [Art Institute of Chicago](https://api.artic.edu/docs) | `GET https://api.artic.edu/api/v1/artworks/search?q=…&limit=…&page=…` (paginated, `is_public_domain` filter) | `https://api.artic.edu/api/v1/artworks/{id}/manifest.json` (Presentation 2.x) | Data CC0 except `description` (CC-BY 4.0); images via IIIF Image API at `https://www.artic.edu/iiif/2`. Only presume reuse for works marked public domain/CC0. **Primary source.** |
-| [Wellcome Collection](https://developers.wellcomecollection.org/docs/catalogue) | `GET https://api.wellcomecollection.org/catalogue/v2/works?query=…&pageSize=…&include=items` | `items[].locations[]` with `locationType` `iiif-presentation`, e.g. `https://iiif.wellcomecollection.org/presentation/v2/{id}` | Books, manuscripts, medical history. Licence is per item (`license` field); show it. Confirm reuse terms on their docs before launch. |
-| [Internet Archive](https://archive.org/advancedsearch.php) | `advancedsearch.php?q=mediatype:image AND …&fl[]=identifier&output=json` | `https://iiif.archive.org/iiif/{identifier}/manifest.json` returned a redirect to a `collection.json` in testing, so the exact manifest URL pattern **needs more testing** | Huge and mixed rights; filter and display license. Phase it after AIC and Wellcome. |
-| Library of Congress | `https://www.loc.gov/pictures/search/?q=…&fo=json` responded (200) | not yet checked | Slow response on first try; investigate later. |
-
-Tasks:
-
-- [ ] Provider interface: `search(query, filters, page) -> results[{id, title, creator, date, thumbnail, manifestUrl, license}]`
-- [ ] AIC provider first (search → results grid → open `manifest.json` in Mirador)
-- [ ] Wellcome provider (extract the IIIF manifest URL from each result; skip works without one)
-- [ ] Internet Archive provider (after confirming the manifest URL pattern)
-- [ ] Source picker + combined search across providers; filters: public domain only, has image
-- [ ] Browse mode: department/classification (where the API offers it), highlights, random pick
-- [ ] Result grid with thumbnails (IIIF Image API URLs, small size), pagination / infinite scroll
-- [ ] Detail view: metadata, license/rights, link back to the source page
-- [ ] "Open in viewer" and "Add to collage" on each result (feeds the collage section)
-- [ ] Attribution line per source in the UI (e.g., "Data and images from the Art Institute of Chicago")
-- [ ] Rate limiting / backoff, friendly errors, per-provider loading and failure states
-- [ ] Decide: browser-only vs. Cloudflare Worker proxy/cache
-
-Optional later: **The Met** (`/public/collection/v1.1/search`; the old `/v1/search` was retired 2026-10-01). No native IIIF, so manifests would have to be generated client-side from the JPEG URLs ([docs](https://metmuseum.github.io/)).
+- [x] Art Institute of Chicago (primary). Uses the Elasticsearch DSL because plain `q` only re-ranks and never filters (checked); filters exact public domain
+- [x] Wellcome Collection (IIIF manifest from each result; licence shown)
+- [x] Internet Archive (manifest `https://iiif.archive.org/iiif/{id}/manifest.json`; some items are slow or return 500)
+- [x] Source picker, "All sources" (results interleaved), public-domain filter, pagination, random page, attribution and rights on every result
+- [~] **Not verified in a browser from this sandbox:** AIC, Smithsonian and Wellcome *image* servers answer 403 to the `HeadlessChrome` user agent (confirmed with curl), so in-browser image tiles for those could not be tested here. They return 200 for normal user agents; please open a few items in your own browser.
+- [ ] Library of Congress provider (search responded; manifests not checked)
+- [ ] Optional: The Met (no native IIIF; would need generated manifests)
+- [ ] Decide: stay browser-only, or add a Cloudflare Worker cache/proxy
 
 ## Phase 5: Own manifests
 
-- [ ] `public/manifests/` folder served as static JSON
-- [ ] CORS header for `/manifests/*` so other viewers can load them
-- [ ] Document how to add a manifest and a gallery row
-- [ ] (Later) image hosting needs an IIIF Image API server; out of scope for static Pages
+- [x] `public/manifests/` served as static JSON with CORS (`_headers`)
+- [x] `scripts/make-manifest.mjs` builds a Presentation 3.0 manifest from IIIF Image API `info.json` URLs; example: `sunday-on-la-grande-jatte.json` (AIC public-domain image). Loads in Mirador locally. Not run through the official IIIF validator.
+- [x] Documented in README
+- [ ] Image hosting (needs an IIIF Image API server; out of scope for static Pages)
 
 ## Phase 6: Viewer polish
 
-- [ ] URL-bar manifest input on the landing page
-- [ ] Light/dark theme
-- [ ] Shareable-link button (via share plugin)
-- [ ] `/embed` route for iframes (chrome-less viewer)
-- [ ] glosse.me branding via a `Branding` wrap plugin ([plugin docs](https://github.com/ProjectMirador/mirador/wiki/M3---Mirador-3-plugins))
+- [x] Light/dark theme (saved in localStorage), also applied to Mirador
+- [x] Shareable link (collage page + share plugin)
+- [x] `/embed` route (no site chrome, no workspace controls, read-only annotations)
+- [x] glosse.me branding via a `Branding` wrap plugin
+- [ ] URL-bar manifest input on the viewer page (today: Mirador's own "Add resource" button, or the collage page)
 
 ## Phase 7: Annotations
 
-- [ ] Viewing existing annotations works out of the box
-- [ ] Decide storage for created annotations (annotation editor needs a backend / adapter; e.g., Cloudflare Workers + KV/D1)
-- [ ] Wire `mirador-annotation-editor` to the chosen storage
+- [x] Annotation editor loaded with its `LocalStorageAdapter` (per-browser, per-canvas, with export)
+- [ ] Server storage (needs a backend, e.g. Cloudflare Workers + KV/D1, or an annotation server such as Aiiinotate) so annotations can be shared
 
 ## Docs
 
-- [ ] README: what this is, how to run, how to add manifests
-- [ ] Keep this file updated as items finish
+- [x] README, `docs/DEPLOY.md`
+- [ ] Add screenshots after the first deploy
