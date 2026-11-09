@@ -1,0 +1,37 @@
+{
+  "name": "iiif-glosse-me",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.3.0",
+    "vite": "^8.3.7"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^9.5.0",
+    "@mui/material": "^9.5.0",
+    "@mui/system": "^9.5.0",
+    "mirador": "^4.3.0",
+    "mirador-annotation-editor": "^1.4.1",
+    "mirador-canvaslink": "^1.0.5",
+    "mirador-canvasnavigation": "^1.0.11",
+    "mirador-dl-plugin": "^1.1.2",
+    "mirador-downloaddialog": "^1.0.10",
+    "mirador-image-tools": "^1.0.2",
+    "mirador-imagecropper": "^1.0.4",
+    "mirador-keyboardshortcuts": "^1.0.3",
+    "mirador-share-plugin": "^1.0.2",
+    "mirador-textoverlay": "^1.1.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-i18next": "^15.7.4"
+  }
+}
