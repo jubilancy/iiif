@@ -9,10 +9,15 @@ A Mirador-based IIIF viewer and manifest gallery, deployed on Cloudflare at `iii
 - **React 19** (required by `mirador-dl-plugin` and `mirador-annotation-editor`).
 - Hosting: Cloudflare Pages, custom domain `iiif.glosse.me`.
 
+## Notes
+
+- `docs/` is source-only planning (not deployed). The deployed site is the Vite build output (`dist/`).
+- Repo is public, licensed MIT (`LICENSE`; the copyright notice must be kept, which gives credit). Met data is CC0, but credit the Met in the UI anyway.
+
 ## Open questions
 
-- [ ] `docs/` is source-only. The deployed site is the Vite build output (`dist/`), so `docs/TODO.md` will not be served unless we copy it into `public/`. Confirm that's what is wanted.
-- [ ] Repo visibility (public/private) and license.
+(none right now)
+
 
 ## Phase 1: Scaffold
 
@@ -73,6 +78,22 @@ Purpose: anyone who arrives without manifest URLs can browse a curated set and o
   - [ ] Downloadable IIIF Collection JSON
   - [ ] Image collage (PNG), rendered client-side from manifest thumbnails/images (check CORS on source image servers; handle failures per item)
 - [ ] "Add to collage" button on gallery cards
+
+## Phase 4b: Met Museum search and browse
+
+The Met Collection API ([docs](https://metmuseum.github.io/)) needs no key; limit to 80 requests/second. Verified: API and image hosts both send `Access-Control-Allow-Origin: *`, so browser-side calls and the PNG collage canvas export work.
+
+- [ ] Search UI: query box + filters (department via `/departments`, `hasImages`, `isHighlight`, date range, medium/tags etc. as supported by the search endpoint)
+- [ ] Use `GET /public/collection/v1.1/search` with `offset` and `limit` (default 100, max 500). **The old `/v1/search` was retired 2026-10-01** (it now returns an error pointing to v1.1)
+- [ ] Search returns only `objectIDs`; fetch each `GET /objects/{id}` for details. Page results (e.g., 24 per page), fetch in small concurrent batches, cache in memory, stay under 80 req/s
+- [ ] Browse by department; highlights; random pick
+- [ ] Result grid with `primaryImageSmall`, title, artist, date; skip objects without open-access images (only public-domain images are served)
+- [ ] Detail view with metadata, credit line, link back to the Met page
+- [ ] **IIIF gap:** the Met API returns plain JPEG URLs, not IIIF manifests. Generate a IIIF Presentation 3.0 manifest client-side per object (canvas size from the image, `primaryImage` + `additionalImages` as canvases, metadata from the record), and open it in Mirador via a Blob/data URL or a Worker route
+- [ ] "Add to collage" from Met results; export formats as in the collage section
+- [ ] Attribution: "Image and data from The Metropolitan Museum of Art, CC0" with link, shown in the UI
+- [ ] Rate limiting / error handling (retry with backoff, friendly message on failure)
+- [ ] Decide: pure client-side vs. a Cloudflare Worker proxy/cache (client-side works with CORS; a Worker would add caching and a stable manifest URL for sharing)
 
 ## Phase 5: Own manifests
 
