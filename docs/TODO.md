@@ -11,7 +11,6 @@ A Mirador-based IIIF viewer and manifest gallery, deployed on Cloudflare at `iii
 
 ## Open questions
 
-- [ ] Collage export format: what should "export" produce? Options: (a) shareable link (`/?manifest=a&manifest=b…`), (b) a combined IIIF Collection JSON file to download, (c) a flattened image collage (PNG). Default plan: do (a) and (b) first.
 - [ ] `docs/` is source-only. The deployed site is the Vite build output (`dist/`), so `docs/TODO.md` will not be served unless we copy it into `public/`. Confirm that's what is wanted.
 - [ ] Repo visibility (public/private) and license.
 
@@ -69,7 +68,10 @@ Purpose: anyone who arrives without manifest URLs can browse a curated set and o
 - [ ] Collage page: textarea, one manifest URL per line
 - [ ] Validate each line (fetch, check it is a IIIF manifest, report failures per line without blocking the rest)
 - [ ] Preview the collected items as a grid; reorder/remove before export
-- [ ] Export: shareable multi-manifest link; downloadable IIIF Collection JSON (see open question for other formats)
+- [ ] Export menu offering all three (user chooses):
+  - [ ] Shareable link (`/?manifest=a&manifest=b…`)
+  - [ ] Downloadable IIIF Collection JSON
+  - [ ] Image collage (PNG), rendered client-side from manifest thumbnails/images (check CORS on source image servers; handle failures per item)
 - [ ] "Add to collage" button on gallery cards
 
 ## Phase 5: Own manifests
