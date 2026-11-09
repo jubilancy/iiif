@@ -79,21 +79,33 @@ Purpose: anyone who arrives without manifest URLs can browse a curated set and o
   - [ ] Image collage (PNG), rendered client-side from manifest thumbnails/images (check CORS on source image servers; handle failures per item)
 - [ ] "Add to collage" button on gallery cards
 
-## Phase 4b: Met Museum search and browse
+## Phase 4b: Searchable museum/library sources (IIIF-native)
 
-The Met Collection API ([docs](https://metmuseum.github.io/)) needs no key; limit to 80 requests/second. Verified: API and image hosts both send `Access-Control-Allow-Origin: *`, so browser-side calls and the PNG collage canvas export work.
+Replaces the earlier Met-only plan. The Met API returns plain JPEGs with no IIIF manifests, so it is demoted to optional (see end). Verified live on 2026-11-09 (all send `Access-Control-Allow-Origin` for browser calls unless noted):
 
-- [ ] Search UI: query box + filters (department via `/departments`, `hasImages`, `isHighlight`, date range, medium/tags etc. as supported by the search endpoint)
-- [ ] Use `GET /public/collection/v1.1/search` with `offset` and `limit` (default 100, max 500). **The old `/v1/search` was retired 2026-10-01** (it now returns an error pointing to v1.1)
-- [ ] Search returns only `objectIDs`; fetch each `GET /objects/{id}` for details. Page results (e.g., 24 per page), fetch in small concurrent batches, cache in memory, stay under 80 req/s
-- [ ] Browse by department; highlights; random pick
-- [ ] Result grid with `primaryImageSmall`, title, artist, date; skip objects without open-access images (only public-domain images are served)
-- [ ] Detail view with metadata, credit line, link back to the Met page
-- [ ] **IIIF gap:** the Met API returns plain JPEG URLs, not IIIF manifests. Generate a IIIF Presentation 3.0 manifest client-side per object (canvas size from the image, `primaryImage` + `additionalImages` as canvases, metadata from the record), and open it in Mirador via a Blob/data URL or a Worker route
-- [ ] "Add to collage" from Met results; export formats as in the collage section
-- [ ] Attribution: "Image and data from The Metropolitan Museum of Art, CC0" with link, shown in the UI
-- [ ] Rate limiting / error handling (retry with backoff, friendly message on failure)
-- [ ] Decide: pure client-side vs. a Cloudflare Worker proxy/cache (client-side works with CORS; a Worker would add caching and a stable manifest URL for sharing)
+| Source | Search | IIIF manifest | Notes |
+| --- | --- | --- | --- |
+| [Art Institute of Chicago](https://api.artic.edu/docs) | `GET https://api.artic.edu/api/v1/artworks/search?q=…&limit=…&page=…` (paginated, `is_public_domain` filter) | `https://api.artic.edu/api/v1/artworks/{id}/manifest.json` (Presentation 2.x) | Data CC0 except `description` (CC-BY 4.0); images via IIIF Image API at `https://www.artic.edu/iiif/2`. Only presume reuse for works marked public domain/CC0. **Primary source.** |
+| [Wellcome Collection](https://developers.wellcomecollection.org/docs/catalogue) | `GET https://api.wellcomecollection.org/catalogue/v2/works?query=…&pageSize=…&include=items` | `items[].locations[]` with `locationType` `iiif-presentation`, e.g. `https://iiif.wellcomecollection.org/presentation/v2/{id}` | Books, manuscripts, medical history. Licence is per item (`license` field); show it. Confirm reuse terms on their docs before launch. |
+| [Internet Archive](https://archive.org/advancedsearch.php) | `advancedsearch.php?q=mediatype:image AND …&fl[]=identifier&output=json` | `https://iiif.archive.org/iiif/{identifier}/manifest.json` returned a redirect to a `collection.json` in testing, so the exact manifest URL pattern **needs more testing** | Huge and mixed rights; filter and display license. Phase it after AIC and Wellcome. |
+| Library of Congress | `https://www.loc.gov/pictures/search/?q=…&fo=json` responded (200) | not yet checked | Slow response on first try; investigate later. |
+
+Tasks:
+
+- [ ] Provider interface: `search(query, filters, page) -> results[{id, title, creator, date, thumbnail, manifestUrl, license}]`
+- [ ] AIC provider first (search → results grid → open `manifest.json` in Mirador)
+- [ ] Wellcome provider (extract the IIIF manifest URL from each result; skip works without one)
+- [ ] Internet Archive provider (after confirming the manifest URL pattern)
+- [ ] Source picker + combined search across providers; filters: public domain only, has image
+- [ ] Browse mode: department/classification (where the API offers it), highlights, random pick
+- [ ] Result grid with thumbnails (IIIF Image API URLs, small size), pagination / infinite scroll
+- [ ] Detail view: metadata, license/rights, link back to the source page
+- [ ] "Open in viewer" and "Add to collage" on each result (feeds the collage section)
+- [ ] Attribution line per source in the UI (e.g., "Data and images from the Art Institute of Chicago")
+- [ ] Rate limiting / backoff, friendly errors, per-provider loading and failure states
+- [ ] Decide: browser-only vs. Cloudflare Worker proxy/cache
+
+Optional later: **The Met** (`/public/collection/v1.1/search`; the old `/v1/search` was retired 2026-10-01). No native IIIF, so manifests would have to be generated client-side from the JPEG URLs ([docs](https://metmuseum.github.io/)).
 
 ## Phase 5: Own manifests
 
