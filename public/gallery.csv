@@ -1,0 +1,6 @@
+manifest_url,title,thumbnail,collection,notes
+https://ids.si.edu/ids/manifest/FS-8106_01,,,Smithsonian,National Museum of Asian Art
+https://api.artic.edu/api/v1/artworks/27992/manifest.json,,,Art Institute of Chicago,
+https://iiif.archive.org/iiif/claude-monet-detail-of-clear-morning-with-willows-endlos/manifest.json,,,Internet Archive,
+https://iiif.wellcomecollection.org/presentation/v2/b22396147,,,Wellcome Collection,
+https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json,A Sunday on La Grande Jatte (own manifest),https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/!300,300/0/default.jpg,iiif.glosse.me,Example generated with scripts/make-manifest.mjs

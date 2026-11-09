@@ -1,0 +1,83 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "A Sunday on La Grande Jatte — 1884"
+    ]
+  },
+  "summary": {
+    "en": [
+      "Example manifest built from the Art Institute of Chicago's public-domain image (Georges Seurat, 1884–86)."
+    ]
+  },
+  "rights": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Attribution"
+      ]
+    },
+    "value": {
+      "en": [
+        "Art Institute of Chicago, Helen Birch Bartlett Memorial Collection (public domain, CC0)"
+      ]
+    }
+  },
+  "thumbnail": [
+    {
+      "id": "https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/!300,300/0/default.jpg",
+      "type": "Image",
+      "format": "image/jpeg"
+    }
+  ],
+  "items": [
+    {
+      "id": "https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json/canvas/1",
+      "type": "Canvas",
+      "label": {
+        "none": [
+          "Image 1"
+        ]
+      },
+      "width": 9310,
+      "height": 6237,
+      "thumbnail": [
+        {
+          "id": "https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/!300,300/0/default.jpg",
+          "type": "Image",
+          "format": "image/jpeg"
+        }
+      ],
+      "items": [
+        {
+          "id": "https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json/canvas/1/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json/canvas/1/page/image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://iiif.glosse.me/manifests/sunday-on-la-grande-jatte.json/canvas/1",
+              "body": {
+                "id": "https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb/full/full/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 9310,
+                "height": 6237,
+                "service": [
+                  {
+                    "@id": "https://www.artic.edu/iiif/2/2d484387-2509-5e8e-2c43-22f9981972eb",
+                    "@type": "ImageService2",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
