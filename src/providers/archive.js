@@ -23,6 +23,7 @@ export default {
   name: 'Internet Archive',
   attribution: 'Items from the Internet Archive; rights vary and are shown on each result.',
   termsUrl: 'https://archive.org/about/terms.php',
+  manifestFor: (id) => `https://iiif.archive.org/iiif/${encodeURIComponent(id)}/manifest.json`,
   async search({ q, page = 1, publicOnly = true, signal }) {
     const clauses = ['mediatype:image'];
     if (q) clauses.push(`(${q})`);

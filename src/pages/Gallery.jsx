@@ -67,7 +67,8 @@ export default function Gallery() {
               <strong title={r.title}>{r.title || r.manifest_url}</strong>
               {r.collection && <span className="muted small">{r.collection}</span>}
               <div className="row small">
-                <button onClick={() => navigate(viewerUrl([r.manifest_url]))}>Open</button>
+                <button onClick={() => navigate(`/item?manifest=${encodeURIComponent(r.manifest_url)}`)}>View</button>
+                <button className="ghost" onClick={() => navigate(viewerUrl([r.manifest_url]))}>Viewer</button>
                 <button className="ghost" onClick={() => add(r)}>Add to collage</button>
               </div>
             </div>

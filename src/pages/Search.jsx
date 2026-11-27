@@ -79,7 +79,8 @@ export default function Search() {
               <span className="muted small">{[it.creator, it.date].filter(Boolean).join(' · ')}</span>
               <span className="muted small">{providerById[it.source].name} · {it.rights}</span>
               <div className="row small">
-                <button onClick={() => navigate(viewerUrl([it.manifestUrl]))}>Open</button>
+                <button onClick={() => navigate(`/item?manifest=${encodeURIComponent(it.manifestUrl)}&source=${it.source}`)}>View</button>
+                <button className="ghost" onClick={() => navigate(viewerUrl([it.manifestUrl]))}>Viewer</button>
                 <button className="ghost" onClick={() => { const n = addToCollage([{ url: it.manifestUrl, title: it.title, thumbnail: it.thumbnail }]); setNotice(n ? `Added “${it.title}” to your collage.` : 'Already in your collage.'); }}>Add to collage</button>
                 <a className="ghost-link" href={it.pageUrl} target="_blank" rel="noreferrer">Source ↗</a>
               </div>

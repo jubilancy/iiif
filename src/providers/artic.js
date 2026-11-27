@@ -25,6 +25,7 @@ export default {
   name: 'Art Institute of Chicago',
   attribution: 'Data and images from the Art Institute of Chicago (data CC0; see their terms).',
   termsUrl: 'https://www.artic.edu/terms',
+  manifestFor: (id) => `${API}/artworks/${encodeURIComponent(id)}/manifest.json`,
   async search({ q, page = 1, publicOnly = true, signal }) {
     const params = new URLSearchParams({ limit: String(PER_PAGE), page: String(page), fields: FIELDS });
     let url;

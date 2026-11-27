@@ -1,0 +1,19 @@
+[
+  {"id":"vam","name":"Victoria and Albert Museum","group":"project","how":"Search source; item shortcut /item/vam/{id}","examples":[{"manifest":"https://iiif.vam.ac.uk/collections/O1155200/manifest.json"}]},
+  {"id":"artic","name":"Art Institute of Chicago","group":"project","how":"Search source; item shortcut /item/artic/{id}; gallery","examples":[{"manifest":"https://api.artic.edu/api/v1/artworks/27992/manifest.json"}]},
+  {"id":"wellcome","name":"Wellcome Collection","group":"project","how":"Search source; gallery","examples":[{"manifest":"https://iiif.wellcomecollection.org/presentation/v2/b22396147"}]},
+  {"id":"archive","name":"Internet Archive","group":"project","how":"Search source; item shortcut /item/archive/{id}; gallery","examples":[{"manifest":"https://iiif.archive.org/iiif/claude-monet-detail-of-clear-morning-with-willows-endlos/manifest.json"}]},
+  {"id":"si","name":"Smithsonian Institution","group":"project","how":"Gallery","examples":[{"manifest":"https://ids.si.edu/ids/manifest/FS-8106_01"}]},
+  {"id":"bodleian","name":"University of Oxford (Bodleian Libraries)","group":"consortium","examples":[{"manifest":"https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json"}]},
+  {"id":"princeton","name":"Princeton University Library","group":"consortium","examples":[{"manifest":"https://figgy.princeton.edu/concern/scanned_resources/484e82f7-1b84-4df7-a15d-c9b34ac2407a/manifest"}]},
+  {"id":"cambridge","name":"Cambridge University Digital Library","group":"consortium","examples":[{"manifest":"https://cudl.lib.cam.ac.uk/iiif/MS-ADD-02351"}]},
+  {"id":"getty","name":"The J. Paul Getty Trust","group":"consortium","examples":[{"manifest":"https://media.getty.edu/iiif/manifest/4fc71f54-cd9e-4d68-bb33-3866e5deb530"}]},
+  {"id":"nga","name":"National Gallery of Art (library image collections)","group":"consortium","examples":[{"manifest":"https://libraryimage.nga.gov/manifest/mms/99682033504896.json"}]},
+  {"id":"europeana","name":"Europeana","group":"consortium","examples":[{"manifest":"https://iiif.europeana.eu/presentation/9200396/BibliographicResource_3000118436165/manifest"}]},
+  {"id":"edinburgh","name":"University of Edinburgh","group":"consortium","examples":[{"manifest":"https://librarylabs.ed.ac.uk/iiif/speccollprototype/manifest/be873687/manifest"}]},
+  {"id":"bsb","name":"Bayerische Staatsbibliothek (Bavarian State Library)","group":"consortium","examples":[{"manifest":"https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00011222/manifest"}]},
+  {"id":"manchester","name":"University of Manchester Library","group":"other","examples":[{"manifest":"https://www.digitalcollections.manchester.ac.uk/iiif/PR-SPCC-11597"}]},
+  {"id":"stanford","name":"Stanford University Libraries (SearchWorks / PURL)","group":"other","examples":[{"manifest":"https://purl.stanford.edu/sn904cj3429/iiif/manifest"}]},
+  {"id":"scta","name":"Scholastic Commentaries and Texts Archive","group":"other","examples":[{"manifest":"https://scta.info/iiif/plaoulcommentary/sorb/manifest"}]},
+  {"id":"codh","name":"CODH (Center for Open Data in the Humanities, Japan)","group":"other","examples":[{"manifest":"http://codh.rois.ac.jp/pmjt/book/200024363/manifest.json"}]}
+]

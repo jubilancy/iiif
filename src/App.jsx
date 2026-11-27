@@ -5,6 +5,7 @@ import Viewer from './pages/Viewer.jsx';
 import Gallery from './pages/Gallery.jsx';
 import Search from './pages/Search.jsx';
 import Collage from './pages/Collage.jsx';
+import Item from './pages/Item.jsx';
 
 function readTheme() {
   try {
@@ -30,17 +31,19 @@ export default function App() {
   }, [theme]);
 
   const embed = path === '/embed';
+  const isItem = path === '/item' || path.startsWith('/item/');
   const isViewer = path === '/viewer' || embed || (path === '/' && manifests.length > 0);
 
   if (embed) return <Viewer manifests={manifests} theme={theme} embed disable={disable} enable={enable} />;
 
   let page;
   if (isViewer) page = <Viewer manifests={manifests} theme={theme} disable={disable} enable={enable} />;
+  else if (isItem) page = <Item path={path} search={search} theme={theme} disable={disable} enable={enable} />;
   else if (path === '/search') page = <Search />;
   else if (path === '/collage') page = <Collage />;
   else page = <Gallery />;
 
-  const navCls = (p) => (path === p || (p === '/' && !isViewer && !['/search', '/collage'].includes(path)) ? 'active' : '');
+  const navCls = (p) => (path === p || (p === '/' && !isViewer && !['/search', '/collage'].includes(path) && !isItem) ? 'active' : '');
 
   return (
     <div className={`app ${isViewer ? 'is-viewer' : ''}`}>
@@ -49,6 +52,7 @@ export default function App() {
         <nav aria-label="Main">
           <Link to="/" className={navCls('/')}>Gallery</Link>
           <Link to="/search" className={navCls('/search')}>Search</Link>
+          <Link to="/item" className={isItem ? 'active' : ''}>Item</Link>
           <Link to="/collage" className={navCls('/collage')}>Collage{collage.length ? ` (${collage.length})` : ''}</Link>
           <Link to="/viewer" className={navCls('/viewer')}>Viewer</Link>
         </nav>
