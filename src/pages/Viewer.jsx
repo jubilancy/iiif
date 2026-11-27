@@ -23,7 +23,7 @@ export default function Viewer({ manifests, theme, embed = false, disable = [], 
         windows: manifests.map((manifestId) => ({ manifestId })),
         window: { sideBarOpenByDefault: false, imageToolsEnabled: true },
         workspaceControlPanel: { enabled: !embed },
-        workspace: { isWorkspaceAddVisible: !embed },
+        workspace: { isWorkspaceAddVisible: false },
         annotation: {
           adapter: (canvasId) => new LocalStorageAdapter(`localStorage://?canvasId=${canvasId}`, 'Anonymous'),
           exportLocalStorageAnnotations: true,

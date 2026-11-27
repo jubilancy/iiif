@@ -3,8 +3,9 @@
 A IIIF viewer, gallery and collage maker built on [Mirador 4](https://github.com/ProjectMirador/mirador).
 
 - **Viewer** (`/viewer?manifest=URL`, repeat `manifest=` to compare). Mirador 4 with image tools, share, download, annotation editor, canvas navigation, keyboard shortcuts, image cropper and canvas link plugins.
+- **Item page** (`/item?manifest=URL`, or `/item/vam/O1155200`): a collections-style page for any IIIF manifest (Presentation 2.x or 3.x). Deep zoom is read straight from the source's IIIF Image API (`info.json`), with metadata, rights, image-size links, a link back to the manifest, and a "Full viewer (plugins)" tab that embeds Mirador with the plugins.
 - **Gallery** (`/`): items from `public/gallery.csv`. The default page for visitors who have no manifest list.
-- **Search** (`/search`): search the Art Institute of Chicago, Wellcome Collection and the Internet Archive (all publish IIIF manifests), with a public-domain/open filter.
+- **Search** (`/search`): search the V&A, Art Institute of Chicago, Wellcome Collection and the Internet Archive (all publish IIIF manifests), with a public-domain/open filter.
 - **Collage** (`/collage`): paste manifest URLs, one per line, then export a shareable link, a IIIF Collection JSON, or a PNG collage.
 - **Embed** (`/embed?manifest=URL`): chrome-less viewer for iframes.
 

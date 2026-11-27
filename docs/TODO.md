@@ -84,3 +84,15 @@ Legend: [x] done and checked here; [~] built but not fully verified (reason give
 
 - [x] README, `docs/DEPLOY.md`
 - [ ] Add screenshots after the first deploy
+
+## Item page (collections-style page for any manifest)
+
+- [x] `/item?manifest=URL` and `/item/<provider>/<id>` (providers with a manifest URL pattern: `vam`, `artic`, `archive`)
+- [x] Reads Presentation 2.x and 3.x; Image API 2.x and 3.x (`!w,h` sizing works for both); HTML in metadata is rendered through a small safe subset (links http/https only)
+- [x] Deep zoom via OpenSeadragon straight from the source image server's `info.json`; falls back to a fixed-size `<img>` if the server blocks cross-origin tiles
+- [x] Metadata, rights/attribution, provider logo, multi-page thumbnails, image-size links, manifest link, source-page link, copy manifest URL, add to collage
+- [x] "Full viewer (plugins)" tab embeds Mirador with the plugins (download, share, crop, image tools, canvas navigation visible)
+- [x] V&A added as a search source (API returns each record's manifest URL)
+- [x] Tested end to end in headless Chromium with the V&A item `O1155200` (tiles loaded from `framemark.vam.ac.uk`) and an Internet Archive v3 manifest
+- [~] Not tested: the other IIIF Consortium members' sites (the item page is source-agnostic, but each one's manifest quirks are unchecked), and Library of Congress (its server returns 403 to the headless test browser)
+- [x] **Bug fixed:** the main viewer started with Mirador's "add resource" catalog open instead of the item (`isWorkspaceAddVisible` was wrongly `true`). The earlier "viewer mounts" check did not catch this.
