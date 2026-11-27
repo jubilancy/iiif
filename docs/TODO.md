@@ -83,6 +83,7 @@ Legend: [x] done and checked here; [~] built but not fully verified (reason give
 ## Docs
 
 - [x] README, `docs/DEPLOY.md`
+- [x] `docs/SOURCES.md`: sources with a checked example manifest each (`scripts/check-manifests.mjs`)
 - [ ] Add screenshots after the first deploy
 
 ## Item page (collections-style page for any manifest)
