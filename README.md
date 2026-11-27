@@ -27,7 +27,7 @@ node scripts/make-manifest.mjs --name my-item --label "My item" \
   https://example.org/iiif/2/some-image/info.json
 ```
 
-This writes `public/manifests/my-item.json`. Add a row to `public/gallery.csv` (`manifest_url,title,thumbnail,collection,notes`) to list it in the gallery. Deployment notes are in [docs/DEPLOY.md](docs/DEPLOY.md); the plan and status are in [docs/TODO.md](docs/TODO.md).
+This writes `public/manifests/my-item.json`. Add a row to `public/gallery.csv` (`manifest_url,title,thumbnail,collection,notes`) to list it in the gallery. Deployment (GitHub Actions to GitHub Pages, Cloudflare as an alternative) is in [docs/DEPLOY.md](docs/DEPLOY.md); the plan and status are in [docs/TODO.md](docs/TODO.md).
 
 ## Credits and licence
 

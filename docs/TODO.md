@@ -32,7 +32,9 @@ Legend: [x] done and checked here; [~] built but not fully verified (reason give
 ## Phase 2: Cloudflare deploy
 
 - [x] `public/_headers` (CORS for `/manifests/*`, caching) and SPA fallback confirmed from Cloudflare docs; see `docs/DEPLOY.md`
-- [ ] **Manual (needs your Cloudflare account):** create the Pages project, set build to `npm run build` / `dist`, add custom domain `iiif.glosse.me`
+- [x] GitHub Pages workflow `.github/workflows/deploy.yml` (build, SPA 404 fallback, deploy); see `docs/DEPLOY.md`
+- [ ] **Manual (repo settings + DNS):** Settings → Pages → Source: GitHub Actions; custom domain `iiif.glosse.me`; `CNAME iiif → jubilancy.github.io`; re-run the workflow
+- [ ] Cloudflare Pages remains an alternative (not set up)
 
 ## Phase 3: Plugins
 
